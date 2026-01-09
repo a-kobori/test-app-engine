@@ -52,12 +52,25 @@ gcloud app create --region=asia-northeast1
 
 ### 2. Firestoreデータベースの作成
 
+#### 方法1: gcloud CLIを使用
+
 ```bash
 # Firestoreデータベース作成（初回のみ）
 gcloud firestore databases create \
   --location=asia-northeast1 \
   --type=firestore-native
 ```
+
+#### 方法2: GCPコンソールを使用
+
+1. [Firestore コンソール](https://console.cloud.google.com/firestore)にアクセス
+2. プロジェクト`coit-digital-sandbox-202511`を選択
+3. 「データベースを作成」をクリック
+4. データベースタイプで「Native mode」を選択
+5. ロケーションで「asia-northeast1 (Tokyo)」を選択
+6. 「作成」をクリック
+
+> **注意**: DatastoreモードではなくNative modeを選択してください。一度作成すると変更できません。
 
 ## デプロイ
 
