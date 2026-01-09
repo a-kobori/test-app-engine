@@ -55,6 +55,15 @@ jobs:
           gcloud services enable appengine.googleapis.com
           gcloud services enable firestore.googleapis.com
 
+      - name: Create App Engine application (if not exists)
+        run: |
+          if ! gcloud app describe >/dev/null 2>&1; then
+            echo "Creating App Engine application..."
+            gcloud app create --region=asia-northeast1
+          else
+            echo "App Engine application already exists"
+          fi
+
       - name: Create requirements.txt for App Engine
         run: |
           uv export --format requirements-txt --no-hashes > requirements.txt
