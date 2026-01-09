@@ -49,6 +49,7 @@ gcloud app create --region=asia-northeast1
 2. プロジェクト`coit-digital-sandbox-202511`を選択
 3. 「アプリケーションを作成」をクリック
 4. リージョン`asia-northeast1`（東京）を選択
+5. デフォルト権限で作成 ※本運用時は権限をしぼったアカウントが望ましい
 
 ### 2. Firestoreデータベースの作成
 
@@ -66,11 +67,17 @@ gcloud firestore databases create \
 1. [Firestore コンソール](https://console.cloud.google.com/firestore)にアクセス
 2. プロジェクト`coit-digital-sandbox-202511`を選択
 3. 「データベースを作成」をクリック
-4. データベースタイプで「Native mode」を選択
-5. ロケーションで「asia-northeast1 (Tokyo)」を選択
-6. 「作成」をクリック
+4. **Select your edition**で「Firestore」を選択
+5. **Choose the mode for your database**で「Native mode」を選択
+6. **Secure your database**で「Start in test mode」を選択
+   - セキュリティルールは後で設定可能
+   - 本番環境では「Start in production mode」を推奨
+7. **Set a location for your database**で「asia-northeast1 (Tokyo)」を選択
+8. 「作成」をクリック
 
-> **注意**: DatastoreモードではなくNative modeを選択してください。一度作成すると変更できません。
+> **注意**: 
+> - DatastoreモードではなくNative modeを選択してください。一度作成すると変更できません
+> - Test modeは誰でもアクセス可能なので、本番環境では必ずProduction modeにしてセキュリティルールを設定してください
 
 ## デプロイ
 
