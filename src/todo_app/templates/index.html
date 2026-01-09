@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - GCP認証付きTODOアプリ</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        
+        .header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .user-info {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .todo-form {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .todo-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .add-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .add-btn:hover {
+            background: #2563eb;
+        }
+        
+        .todo-list {
+            min-height: 200px;
+        }
+        
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            background: white;
+        }
+        
+        .todo-checkbox {
+            margin-right: 1rem;
+            scale: 1.2;
+        }
+        
+        .todo-text {
+            flex: 1;
+            margin-right: 1rem;
+        }
+        
+        .todo-text.completed {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+        
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            padding: 3rem 1rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📝 {{ title }}</h1>
+        <div class="user-info">
+            ログイン中: test@example.com
+        </div>
+    </div>
+
+    <div class="todo-form">
+        <input 
+            type="text" 
+            class="todo-input" 
+            placeholder="新しいTODOを入力..."
+            hx-post="/todos"
+            hx-target="#todo-list"
+            hx-swap="beforeend"
+            hx-trigger="keyup[keyCode==13]"
+            name="title"
+        >
+        <button 
+            class="add-btn"
+            hx-post="/todos"
+            hx-target="#todo-list"
+            hx-swap="beforeend"
+            hx-include="previous input"
+        >
+            追加
+        </button>
+    </div>
+
+    <div id="todo-list" class="todo-list">
+        <div class="empty-state">
+            TODOがありません。上のフォームから追加してください。
+        </div>
+    </div>
+</body>
+</html>
