@@ -30,7 +30,7 @@ jobs:
           version: "latest"
 
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --extra dev
 
       - name: Run linting
         run: uv run ruff check src/
@@ -70,7 +70,7 @@ jobs:
           version: "latest"
 
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --extra dev
 
       - name: Run security checks (via ruff)
         run: uv run ruff check --select=S src/
@@ -94,7 +94,7 @@ jobs:
           version: "latest"
 
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --extra dev
 
       - name: Test package build
         run: uv build
