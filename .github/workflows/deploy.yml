@@ -1,0 +1,74 @@
+name: Deploy to App Engine
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to App Engine
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests
+        run: uv run pytest --cov=src --cov-report=xml
+
+      - name: Run linting
+        run: uv run ruff check src/
+
+      - name: Run formatting check
+        run: uv run ruff format --check src/
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: coit-digital-sandbox
+
+      - name: Enable required APIs
+        run: |
+          gcloud services enable appengine.googleapis.com
+          gcloud services enable firestore.googleapis.com
+
+      - name: Create requirements.txt for App Engine
+        run: |
+          uv export --format requirements-txt --no-hashes > requirements.txt
+
+      - name: Deploy to App Engine
+        run: |
+          gcloud app deploy --quiet --no-cache
+
+      - name: Get deployment URL
+        id: deploy-url
+        run: |
+          URL=$(gcloud app browse --no-launch-browser 2>&1 | grep -o 'https://[^[:space:]]*' || echo "https://coit-digital-sandbox.appspot.com")
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+
+    outputs:
+      deployment-url: ${{ steps.deploy-url.outputs.url }}

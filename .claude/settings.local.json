@@ -10,7 +10,8 @@
       "Bash(pkill:*)",
       "Bash(git add:*)",
       "Bash(gcloud auth:*)",
-      "Bash(gcloud config:*)"
+      "Bash(gcloud config:*)",
+      "Bash(uv run pytest:*)"
     ],
     "deny": []
   }
