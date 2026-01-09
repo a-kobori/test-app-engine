@@ -22,6 +22,45 @@ uv run python main.py
 
 ## GCP初期設定
 
+### 0. サービスアカウント権限の設定
+
+GitHub Actionsでデプロイを行うサービスアカウントに必要な権限を追加します。
+
+```bash
+# プロジェクトID設定
+PROJECT_ID="coit-digital-sandbox-202511"
+SERVICE_ACCOUNT="mcp-google-sheets@${PROJECT_ID}.iam.gserviceaccount.com"
+
+# 必要な権限を追加
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:${SERVICE_ACCOUNT}" \
+  --role="roles/appengine.deployer"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:${SERVICE_ACCOUNT}" \
+  --role="roles/cloudbuild.builds.builder"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:${SERVICE_ACCOUNT}" \
+  --role="roles/storage.admin"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:${SERVICE_ACCOUNT}" \
+  --role="roles/artifactregistry.writer"
+```
+
+#### GCPコンソールでの設定方法
+
+1. [IAM コンソール](https://console.cloud.google.com/iam-admin/iam)にアクセス
+2. プロジェクト`coit-digital-sandbox-202511`を選択  
+3. サービスアカウント`mcp-google-sheets@coit-digital-sandbox-202511.iam.gserviceaccount.com`を検索
+4. 編集ボタン（鉛筆アイコン）をクリック
+5. 以下のロールを追加：
+   - `App Engine 管理者` または `App Engine デプロイ担当者`
+   - `Cloud Build サービス アカウント`
+   - `ストレージ管理者`
+   - `Artifact Registry 書き込み`
+
 ### 1. App Engine アプリケーションの作成
 
 デプロイ前に、App Engineアプリケーションを作成する必要があります。
