@@ -45,3 +45,5 @@ app-engine-tmp/
 build/
 dist/
 *.egg-info/
+
+coit-digital-sandbox.json
