@@ -47,20 +47,17 @@ jobs:
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: coit-digital-sandbox
 
-      - name: Enable required APIs (continue on error)
-        continue-on-error: true
+      - name: Enable required APIs
         run: |
-          gcloud services enable appengine.googleapis.com || true
-          gcloud services enable firestore.googleapis.com || true
+          gcloud services enable appengine.googleapis.com
+          gcloud services enable firestore.googleapis.com
 
       - name: Create requirements.txt for App Engine
         run: |
           uv export --format requirements-txt --no-hashes > requirements.txt
-
-      - name: Check App Engine status
-        run: |
-          gcloud app describe || echo "App Engine not initialized, continuing..."
 
       - name: Deploy to App Engine
         run: |
